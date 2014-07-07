@@ -1,0 +1,36 @@
+---
+driver:
+  name: vagrant
+  #synced_folders:
+  #  - ["../data", "/opt/instance_data"]
+  #customize:
+  #  memory: 8192
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[locales]
+      - recipe[ubuntu-change-source-list]
+      - recipe[timezone-ii]
+      - recipe[apt]
+      - recipe[apt-repo]
+      #- recipe[postgresql::server]
+      - recipe[pgrouting-cookbook]
+    attributes:
+      ubuntu:
+        mirror_site_url: http://ftp.jaist.ac.jp/pub/Linux/ubuntu/
+        version: 12.04
+        need_deb_src: false
+        need_update: true
+      tz: "Asia/Tokyo"
+      postgresql:
+        initdb_locale: "en_US.UTF_8"
+        password:
+          postgres: "password"
+
